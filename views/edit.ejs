@@ -1,0 +1,17 @@
+<%- include("partials/header") -%>
+
+<h2>Edit Post</h2>
+<form class="edit-form" name="editForm" method="post">
+
+  <div class="form-group">
+    <label>Title</label>
+    <textarea class="form-control" name="newTitle"  rows="1" cols="30"><%=postTitle%></textarea>
+    <label>Post</label>
+    <textarea class="form-control" name="newBody"  rows="5" cols="30"><%=postContent%></textarea>
+  </div>
+  <button class="btn btn-primary edit-page-btns" type="submit" >Save Changes</button>
+  <a href="/post/<%=postId%>" class="btn btn-primary edit-page-btns" role="button" aria-pressed="true">Cancel</a>
+
+</form>
+
+<%- include("partials/footer") -%>

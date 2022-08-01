@@ -1,6 +1,46 @@
 <%- include("partials/header") -%>
 
-<h1><%=postTitle%></h1>
-<p><%=postBody%></p>
+<h2><%=postTitle%></h2>
+
+<% postBody.forEach(function(post) { %>
+<% if(post!=="") { %>
+<p><%=post%></p>
+<% } %>
+<% }); %>
+
+<div>
+
+  <div class="user-buttons">
+    <a href="/" class="btn btn-primary btn-md" role="button" aria-pressed="true">Homepage</a>
+    <a href="/post/<%=randomPostLink%>" class="btn btn-primary btn-md" role="button" aria-pressed="true">Random Entry</a>
+  </div>
+
+  <div class="admin-buttons">
+    <a href="/edit/<%=postId%>" class="btn btn-primary btn-md" role="button" aria-pressed="true">Edit Post</a>
+    <a href="/delete/<%=postId%>" class="btn btn-outline-danger" role="button" type="submit" aria-pressed="true" onclick="return confirm('Are you sure you want to delete this post? This action cannot be undone')">Delete Post</a>
+  </div>
+
+</div>
+
+<br />
+
+<hr class="line-above-icons" />
+
+<div class="post-footer">
+
+<div class="social-media-icons">
+  <a href="https://github.com/stavros1993/"><i class="fa-brands fa-github fa-xl social-media-icon"></i></a>
+  <a href="https://www.linkedin.com/in/stavros-lioulias-37038b157/"><i class="fa-brands fa-linkedin fa-xl social-media-icon"></i></a>
+  <a href="https://www.facebook.com/FakeBloggerProfile"><i class="fa-brands fa-facebook fa-xl social-media-icon"></i></a>
+  <a href="https://www.instagram.com/FakeBloggerProfile"><i class="fa-brands fa-instagram fa-xl social-media-icon"></i></a>
+  <a href="https://twitter.com/FakeBloggerProfile"><i class="fa-brands fa-twitter fa-xl social-media-icon"></i></a>
+
+</div>
+
+<div class= "dateDiv">
+  <p class = "dateText"><%=dateAdded%></p>
+</div>
+
+</div>
 
 <%- include("partials/footer") -%>

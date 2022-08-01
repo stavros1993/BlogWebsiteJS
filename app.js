@@ -3,11 +3,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
-var lodash = require('lodash');
+const mongoose = require('mongoose');
+const lodash = require('lodash');
 
 
-const homeStartingContent = "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
-const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus  massa tincidunt dui.";
+const homeStartingContent = "This is the Home page, which contains all of my posts. Please click on the title or select 'read more' if you want to read each post in full.";
+const aboutContent = "This is the Home page, which contains all of my posts. Please click on the title or select 'read more' if you want to read each post in full.";
 const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 const app = express();
@@ -20,12 +21,35 @@ app.use(bodyParser.urlencoded({
 
 app.use(express.static("public")); //We're telling express that our static files are held inside the "public" folder.
 
+mongoose.connect("mongodb://localhost:27017/BlogDB", {
+  useNewUrlParser: true
+});
+
+/*const BlogPostSchema = {
+  title: String,
+  content: String
+};*/
+
+const BlogPostSchema = mongoose.Schema({
+  title: String,
+  content: String,
+}, {
+  timestamps: true
+});
+
+const BlogPost = mongoose.model("BlogPost", BlogPostSchema);
+
 let posts = [];
+let randomPostId = "";
+
 
 app.get("/", function(req, res) { //app.get is used to create routes in our server. We're telling the server to redirect to "home" if the user goes to the root route
-  res.render(__dirname + "/views/home.ejs", {
-    startingContent: homeStartingContent,
-    posts: posts
+
+  BlogPost.find({}, function(err, posts) {
+    res.render("home", {
+      startingContent: homeStartingContent,
+      posts: posts
+    });
   });
 });
 
@@ -42,43 +66,142 @@ app.get("/contact", function(req, res) { //app.get is used to create routes in o
 });
 
 app.get("/compose", function(req, res) { //app.get is used to create routes in our server
-  res.render(__dirname + "/views/compose.ejs");
+  res.render("compose.ejs");
 });
 
 app.get("/post/:postName", function(req, res) { //app.get is used to create routes in our server
-  const requestedTitle = lodash.lowerCase(req.params.postName);
-  let storedTitle;
 
-  posts.forEach(function(post) {
-    storedTitle = lodash.lowerCase(post.title);
+  console.log("post/start");
+  const requestedPostID = req.params.postName;
+  randomPostGenerator();
+  if (randomPostId === "") {
+    randomPostGenerator();
+  }
 
-    if (storedTitle === requestedTitle) {
+  BlogPost.findById(requestedPostID, function(err, requestedPost) {
 
-      console.log("Match found");
+    if (err) {
+      console.log("error: 404"); //write code later to redirect to an error page
+    } else {
+      let fixedMinutes;
+      let dateAdded = requestedPost.createdAt;
+
+      if (dateAdded.getMinutes() < 10) {
+        fixedMinutes = "" + "0" + dateAdded.getMinutes();
+      } else {
+        fixedMinutes = "" + dateAdded.getMinutes();
+      }
+
+      dateAdded = "Posted: " + dateAdded.getDate() + "/" + (dateAdded.getMonth() + 1) + "/" + dateAdded.getFullYear() + " " + dateAdded.getHours() + ":" + fixedMinutes;
+
+      let fixedContent = requestedPost.content.replace(/(?:\r\n|\r|\n)/g, "FoundNewLine");
+      fixedContent = fixedContent.split("FoundNewLine");
 
       res.render(__dirname + "/views/post.ejs", {
-        postTitle: post.title,
-        postBody: post.body
+        postTitle: requestedPost.title,
+        postBody: fixedContent,
+        randomPostLink: randomPostId,
+        postId: requestedPost._id,
+        dateAdded: dateAdded
       });
-
-    } else {
-      console.log("Not a match");
     }
   });
 
 });
 
-app.post("/compose", function(req, res) {
+app.get("/edit/:editID", function(req, res) {
 
-  const post = {
-    title: req.body.postTitle,
-    body: req.body.postBody
-  };
+  const requestedPostID = req.params.editID;
 
-  posts.push(post);
+  BlogPost.findOne({ //get the ID from the link and check if a corresponding entry exists in the database.
+    _id: requestedPostID
+  }, function(err, postData) {
+    if (err) {
+      console.log("error: 404"); //write code later to redirect to an error page
+    } else {
+      res.render(__dirname + "/views/edit.ejs", {
+        postId: requestedPostID,
+        postTitle: postData.title,
+        postContent: postData.content
+      });
+    }
+  });
+
+});
+
+app.get("/delete/:deleteID", function(req, res) {
+
+  const requestedPostID = req.params.deleteID;
+
+  BlogPost.findByIdAndDelete(requestedPostID, function(err, docs) {
+    if (err) {
+      console.log(err); //404
+    } else {
+      console.log("Deleted : ", docs);
+    }
+  });
+
   res.redirect("/");
 
 });
+
+app.post("/compose", function(req, res) {
+  const newPost = new BlogPost({
+    title: req.body.postTitle,
+    content: req.body.postBody
+  });
+
+  newPost.save(function(err) {
+    if (!err) {
+      res.redirect("/");
+    }
+  });
+});
+
+app.post("/edit/:editID", function(req, res) {
+
+  console.log("we have this id" + req.params.editID + " and with the help of the server we have the following:" + req.body.newTitle + req.body.newBody);
+
+  BlogPost.updateOne({
+    _id: {
+      $eq: req.params.editID
+    }
+  }, {
+    title: req.body.newTitle,
+    content: req.body.newBody
+  }, function(err, docs) {
+    if (err) {
+      console.log(err); //404
+    }
+  });
+
+  res.redirect("/");
+
+});
+
+function randomPostGenerator() {
+
+  BlogPost.find().count(function(err, count) { //we count the num of posts saved in the DB. This will be useful for the randomButton
+    if (err) {
+      console.log(err);
+    } else {
+
+      let postIndex = Math.floor(Math.random() * count);
+
+      BlogPost.find({}, null, {
+        skip: postIndex,
+        limit: 1
+      }, function(err, results) {
+        if (err) {
+          console.log(err); //404
+        } else {
+          randomPostId = results[0]._id; //now the random ID is retrieved
+        }
+      });
+    }
+  });
+
+}
 
 app.listen("3000", function() {
   console.log("Server started on port 3000");
