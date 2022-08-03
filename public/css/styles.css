@@ -78,7 +78,7 @@ h2 a:visited {
   margin-top: 1%;
 }
 
-.admin-buttons, .dateDiv {
+.dateDiv {
   display: inline;
   float: right;
 }
@@ -118,51 +118,154 @@ h2 a:visited {
   margin-bottom: 1%;
 }
 
-.social-media-icon-homepage {
-  margin: 1% 1%;
-  color: #ffff;
-}
-
-.error-img {
+.error-img, .contact-header, .icons-contact-pg {
   text-align: center;
 }
 
-.error-pg-btn, .input-err-alert-edit-page {
+.error-pg-btn, .input-alert-edit {
   margin: 1% 0;
 }
 
 .navbar-date {
-font-size: 0.8rem;
-padding-bottom: 1.5%;
+  font-size: 0.8rem;
+  padding-bottom: 1.5%;
 }
 
 .add-btn {
   margin: 2.5% 0%;
 }
 
-.contact-form-text {
-  margin-top: 1%;
-  margin-bottom: 0%;
-  padding-bottom: 0%;
-}
-
 #contact-pg-main {
-  padding: 0% 0%;
-  text-align:center;
+  padding: 0% 15%;
 }
 
 #curDate {
-  padding-top:2%;
-}
-
-.contact-header {
-  text-align: center;
+  padding-top: 2%;
 }
 
 .input-err-alert {
-margin: 1% 17%;
+  margin: 1.5% 0%;
 }
 
-.input-err-alert-compose-page {
-margin: 1% 0%;
+.input-alert-compose {
+  margin: 1% 0%;
+}
+
+.form-control {
+  margin-bottom: 1%;
+}
+
+.icon-contact-pg {
+  margin: 1% 3%;
+  color: #343a40;
+}
+
+.hr-contact-pg {
+  margin-top: 4%;
+}
+
+#social-md-contact-pg {
+  padding: 0 0;
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+}
+
+.short-text {
+  display: none;
+}
+
+.user-btns {
+  text-align: left;
+}
+
+.admin-btns {
+  text-align: right;
+}
+
+.line-post-pg {
+  margin: 0% 0% 2%
+}
+
+
+/* Responsive design for the contact page */
+@media only screen and (max-width: 992px) and (min-width: 765px) {
+  .icon-contact-pg {
+    margin: 2% 2%;
+  }
+
+  .contact-header {
+    margin: 3% 0%;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .icons-contact-pg {
+    padding: 4% 0%;
+    text-align: center;
+  }
+
+  .contact-header {
+    padding: 3% 0%;
+  }
+
+  #curDate {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1200px) and (min-width: 768px) {
+  .full-text {
+    display: none;
+  }
+
+  .short-text {
+    display: inline-block;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .full-text {
+    display: none;
+  }
+
+  .short-text {
+    display: inline-block;
+  }
+
+  .contact-header {
+    padding: 3% 0%;
+  }
+
+  .icons-contact-pg {
+    padding: 1% 0%;
+    text-align: left;
+  }
+}
+
+/* Responsive design for the Post page */
+
+@media only screen and (max-width: 1200px) {
+  .social-media-icon {
+    margin-left: 3%;
+  }
+}
+
+@media only screen and (min-width: 577px) and (max-width: 768px) {
+  .user-btns {
+    text-align: center;
+    margin: 1% 0% 1% 0%;
+  }
+  .admin-btns {
+    text-align: center;
+    margin: 1% 0% 1% 0.5%;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .admin-btns {
+    display: none;
+  }
+  .user-btns {
+    text-align: center;
+  }
 }

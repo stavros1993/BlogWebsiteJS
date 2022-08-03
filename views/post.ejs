@@ -8,22 +8,22 @@
 <% } %>
 <% }); %>
 
-<div>
-  <div class="user-buttons">
-    <a href="/" class="btn btn-primary btn-md" role="button" aria-pressed="true">Homepage</a>
-    <a href="/post/<%=randomPostLink%>" class="btn btn-primary btn-md" role="button" aria-pressed="true">Random Entry</a>
-  </div>
-
-  <div class="admin-buttons">
-    <a href="/edit/<%=postId%>" class="btn btn-primary btn-md" role="button" aria-pressed="true">Edit Post</a>
-    <a href="/delete/<%=postId%>" class="btn btn-outline-danger" role="button" type="submit" aria-pressed="true" onclick="return confirm('Are you sure you want to delete this post? This action cannot be undone')">Delete Post</a>
-  </div>
-
+<div class="flex-container">
+    <div class="row">
+        <div class="col col-sm-12 col-md-6 col-lg-6 user-btns">
+            <a href="/" class="btn btn-primary btn-md" role="button" aria-pressed="true">Homepage</a>
+            <a href="/post/<%=randomPostLink%>" class="btn btn-primary btn-md" role="button" aria-pressed="true">Random Post</a>
+        </div>
+        <div class="col col-sm-12 col-md-6 col-lg-6 admin-btns">
+            <a href="/edit/<%=postId%>" class="btn btn-primary btn-md" role="button" aria-pressed="true">Edit Post</a>
+            <a href="/delete/<%=postId%>" class="btn btn-outline-danger" role="button" type="submit" aria-pressed="true" onclick="return confirm('Are you sure you want to delete this post? This action cannot be undone')">Delete Post</a>
+        </div>
+    </div>
 </div>
 
 <br />
 
-<hr class="line-above-icons" />
+<hr class="line-post-pg" />
 
 <div class="post-footer">
 

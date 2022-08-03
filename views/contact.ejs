@@ -1,43 +1,77 @@
 <%- include("partials/header") -%>
 
-<h2 class="contact-header">Contact Page</h2>
-<p class="contact-header">If you have any questions, suggestions or feedback, please contact me.</p>
+<div id="contact-pg-main">
+  <h2 class="contact-header">Contact Page</h2>
+  <p class="contact-header" id = "contact-text">If you have any questions, suggestions or feedback, please contact me by filling in the form:</p>
 
-<% if(typeof successMsg != 'undefined') { %>
+  <% if(typeof successMsg != 'undefined') { %>
   <div class="alert alert-success alert-dismissible fade show input-err-alert" role="alert">
     <%= successMsg %>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
-<% } %>
+  <% } %>
 
-<div id="contact-pg-main">
+  <% if(typeof alert != 'undefined') { %>
+  <% alert.forEach(function(error) { %>
+  <div class="alert alert-warning alert-dismissible fade show input-err-alert" role="alert">
+    <%= error.msg %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <% }) %>
+  <% } %>
+
   <div>
     <form class="contactForm" action="contact" method="post">
-
-      <% if(typeof alert != 'undefined') { %>
-      <% alert.forEach(function(error) { %>
-      <div class="alert alert-warning alert-dismissible fade show input-err-alert" role="alert">
-        <%= error.msg %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <div class="form-group">
+        <label for="inputName">Full name</label>
+        <input type="text" name="name" class="form-control" id="inputName">
       </div>
-      <% }) %>
-      <% } %>
-
-      <p class="contact-form-text">Full Name</p>
-      <input type="text" name="name" size="80">
-      <br />
-      <p class="contact-form-text">Email</p>
-      <input type="text" name="email" size="80">
-      <p class="contact-form-text">Subject</p>
-      <input type="text" name="subject" size="80">
-      <br />
-      <p class="contact-form-text">Message</p>
-      <textarea name="message" rows="10" cols="83"></textarea>
-      <br />
+      <div class="form-group">
+        <label for="inputPassword">Email</label>
+        <input type="email" name="email" class="form-control" id="inputPassword" aria-describedby="emailHelp">
+      </div>
+      <div class="form-group">
+        <label for="inputSubject">Subject</label>
+        <input type="text" name="subject" class="form-control" id="inputSubject">
+      </div>
+      <div class="form-group">
+        <label for="textarea">Message</label>
+        <textarea class="form-control" name="message" id="textarea" rows="4"></textarea>
+      </div>
       <button class="btn btn-primary" type="submit">Send!</button>
-      
     </form>
   </div>
+
+  <hr class="hr-contact-pg" />
+
+  <div class="container" id="social-md-contact-pg">
+
+    <div class="row">
+
+      <div class="col col-sm-12 col-md-6 col-lg-6">
+
+        <span class="full-text">
+          You can also find me on social media:
+        </span>
+        <span class="short-text">Social media links:</span>
+
+
+      </div>
+
+      <div class="col col-sm-12 col-md-6 col-lg-6 icons-contact-pg">
+
+        <a href="https://github.com/stavros1993/"><i class="fa-brands fa-github fa-xl icon-contact-pg"></i></a>
+        <a href="https://www.linkedin.com/in/stavros-lioulias-37038b157/"><i class="fa-brands fa-linkedin fa-xl icon-contact-pg"></i></a>
+        <a href="https://www.facebook.com/FakeBloggerProfile"><i class="fa-brands fa-facebook fa-xl icon-contact-pg"></i></a>
+        <a href="https://www.instagram.com/FakeBloggerProfile"><i class="fa-brands fa-instagram fa-xl icon-contact-pg"></i></a>
+        <a href="https://twitter.com/FakeBloggerProfile"><i class="fa-brands fa-twitter fa-xl icon-contact-pg"></i></a>
+
+      </div>
+    </div>
+
+  </div>
+
 </div>
+
 
 <%- include("partials/footer") -%>
