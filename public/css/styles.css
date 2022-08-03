@@ -1,7 +1,6 @@
-.navbar {
-  padding: 1% 0%;
-  border: 0;
-  border-radius: 0;
+.nav-menu {
+  padding-top: 1%;
+  padding-bottom: 1%;
   margin-bottom: 1%;
   letter-spacing: 5px;
 }
@@ -78,13 +77,11 @@ h2 a:visited {
   margin-top: 1%;
 }
 
-.dateDiv {
-  display: inline;
+.date-div {
   float: right;
 }
 
 .user-buttons {
-  display: inline;
   float: left;
 }
 
@@ -122,7 +119,7 @@ h2 a:visited {
   text-align: center;
 }
 
-.error-pg-btn, .input-alert-edit {
+.error-pg-btn, .input-alert-edit, .input-alert-compose {
   margin: 1% 0;
 }
 
@@ -135,20 +132,16 @@ h2 a:visited {
   margin: 2.5% 0%;
 }
 
-#contact-pg-main {
+.contact-pg-main {
   padding: 0% 15%;
 }
 
-#curDate {
+.cur-date {
   padding-top: 2%;
 }
 
 .input-err-alert {
   margin: 1.5% 0%;
-}
-
-.input-alert-compose {
-  margin: 1% 0%;
 }
 
 .form-control {
@@ -164,7 +157,7 @@ h2 a:visited {
   margin-top: 4%;
 }
 
-#social-md-contact-pg {
+.social-md-contact-pg {
   padding: 0 0;
   font-family: Georgia, serif;
   font-size: 1.1rem;
@@ -203,12 +196,10 @@ h2 a:visited {
     padding: 4% 0%;
     text-align: center;
   }
-
   .contact-header {
     padding: 3% 0%;
   }
-
-  #curDate {
+  .cur-date {
     display: none;
   }
 }
@@ -217,7 +208,6 @@ h2 a:visited {
   .full-text {
     display: none;
   }
-
   .short-text {
     display: inline-block;
   }
@@ -227,15 +217,12 @@ h2 a:visited {
   .full-text {
     display: none;
   }
-
   .short-text {
     display: inline-block;
   }
-
   .contact-header {
     padding: 3% 0%;
   }
-
   .icons-contact-pg {
     padding: 1% 0%;
     text-align: left;

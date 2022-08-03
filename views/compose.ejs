@@ -1,24 +1,25 @@
 <%- include("partials/header") -%>
 
 <h2>Compose</h2>
-<form class="compose-form" name="composeForm" method="post">    <! -- action="/compose" -->
+<form class="compose-form" name="composeForm" method="post">
+  <! -- action="/compose" -->
 
-  <% if(typeof alert != 'undefined') { %>
-  <% alert.forEach(function(error) { %>
-  <div class="alert alert-warning alert-dismissible fade show input-alert-compose" role="alert">
-    <%= error.msg %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-  <% }) %>
-  <% } %>
+    <% if(typeof alert != 'undefined') { %>
+    <% alert.forEach(function(error) { %>
+    <div class="alert alert-warning alert-dismissible fade show input-alert-compose" role="alert">
+      <%= error.msg %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% }) %>
+    <% } %>
 
-  <div class="form-group">
-    <label>Title</label>
-    <input class="form-control" type="text"  name="postTitle">
-    <label>Post</label>
-    <textarea class="form-control" name="postBody"  rows="5" cols="30"></textarea>
-  </div>
-  <button class="btn btn-primary submit-content-btn" type="submit" >Publish</button>
+    <div class="form-group">
+      <label>Title</label>
+      <input class="form-control" type="text" name="postTitle">
+      <label>Post</label>
+      <textarea class="form-control" name="postBody" rows="5" cols="30"></textarea>
+    </div>
+    <button class="btn btn-primary submit-content-btn" type="submit">Publish</button>
 
 </form>
 
