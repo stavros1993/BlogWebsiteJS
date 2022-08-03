@@ -2,13 +2,12 @@
   padding: 1% 0%;
   border: 0;
   border-radius: 0;
-  margin-bottom: 2%;
+  margin-bottom: 1%;
   letter-spacing: 5px;
 }
 
 .footer {
   text-align: center;
-  bottom: 0;
   width: 100%;
   height: 60px;
   background-color: #6c757d;
@@ -17,8 +16,8 @@
 }
 
 .footer p {
-  margin-top: 25px;
-  font-size: 12px;
+  margin-top: 20px;
+  font-size: 1rem;
   color: #fff;
 }
 
@@ -26,7 +25,7 @@ p {
   line-height: 1.4;
   padding-bottom: 10px;
   font-family: Georgia, serif;
-  font-size: 1.2em;
+  font-size: 1.1rem;
 }
 
 h1, h2 {
@@ -93,7 +92,7 @@ h2 a:visited {
   margin-top: 3%;
 }
 
-.edit-page-btns {
+.edit-page-btns, .post-footer {
   margin-top: 1%;
 }
 
@@ -111,6 +110,59 @@ h2 a:visited {
   font-size: 1rem;
 }
 
-.post-footer {
-  margin-top:1%;
+.page-title {
+  font-size: 1.4rem;
+}
+
+.post-btn {
+  margin-bottom: 1%;
+}
+
+.social-media-icon-homepage {
+  margin: 1% 1%;
+  color: #ffff;
+}
+
+.error-img {
+  text-align: center;
+}
+
+.error-pg-btn, .input-err-alert-edit-page {
+  margin: 1% 0;
+}
+
+.navbar-date {
+font-size: 0.8rem;
+padding-bottom: 1.5%;
+}
+
+.add-btn {
+  margin: 2.5% 0%;
+}
+
+.contact-form-text {
+  margin-top: 1%;
+  margin-bottom: 0%;
+  padding-bottom: 0%;
+}
+
+#contact-pg-main {
+  padding: 0% 0%;
+  text-align:center;
+}
+
+#curDate {
+  padding-top:2%;
+}
+
+.contact-header {
+  text-align: center;
+}
+
+.input-err-alert {
+margin: 1% 17%;
+}
+
+.input-err-alert-compose-page {
+margin: 1% 0%;
 }

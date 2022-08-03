@@ -1,14 +1,13 @@
 <%- include("partials/header") -%>
 
-<h2>Welcome to my blog!</h2>
-
-<p><%= startingContent %></p>
+<div class ="add-btn">
+  <a href="/compose" class="btn btn-primary btn-md" role="button" aria-pressed="true"><i class="fa-solid fa-plus fa-sm"></i> New Post</a>
+</div>
 
 <% posts.slice().reverse().forEach(function(post) { %>
-<hr />
 <h2><a class = "postTitles" href="post/<%=post._id%>"><%=post.title%></a></h2>
-<%console.log(post.content); %>
-<p><%=post.content.substring(0, 450)%>... <a href="post/<%=post._id%>">See post</a></p>
+<p><%=post.content.substring(0, 400)%>... <a href="post/<%=post._id%>">See post</a></p>
+<hr />
 <% }); %>
 
 <%- include("partials/footer") -%>

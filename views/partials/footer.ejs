@@ -1,10 +1,24 @@
-
 </div>
 <div class="clear"></div>
 <div class="footer-padding"></div>
-  <div class="footer">
-    <p>Currently being made by Stavros Lioulias</p>
-  </div>
+<div class="footer">
+  <p>© 2022 Copyright Stavros Lioulias</p>
 </div>
+</div>
+
+<script>
+  function getDate() {
+    const today = new Date();
+    const options = {
+      weekday: "long",
+      day: "numeric",
+      month: "long"
+    };
+    return today.toLocaleDateString("en-US", options);
+  };
+  document.getElementById("curDate").innerHTML = getDate();
+  console.log(getDate());
+</script>
 </body>
+
 </html>

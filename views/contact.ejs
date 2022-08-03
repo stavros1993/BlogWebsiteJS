@@ -1,7 +1,35 @@
 <%- include("partials/header") -%>
 
-<h2>Contact</h2>
+<h2 class="contact-header">Contact Page</h2>
+<p class="contact-header">If you have any questions, suggestions or feedback, please contact me.</p>
 
-<p><%=contactContent%></p>
+<div id="contact-pg-main">
+  <div>
+    <form class="contactForm" action="contact" method="post">
+
+      <% if(typeof alert != 'undefined') { %>
+      <% alert.forEach(function(error) { %>
+      <div class="alert alert-warning alert-dismissible fade show input-err-alert" role="alert">
+        <%= error.msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <% }) %>
+      <% } %>
+
+      <p class="contact-form-text">Full Name</p>
+      <input type="text" name="name" size="80">
+      <br />
+      <p class="contact-form-text">Email</p>
+      <input type="text" name="email" size="80">
+      <p class="contact-form-text">Subject</p>
+      <input type="text" name="subject" size="80">
+      <br />
+      <p class="contact-form-text">Message</p>
+      <textarea name="message" rows="10" cols="83"></textarea>
+      <br />
+      <button class="btn btn-primary" type="submit">Send!</button>
+    </form>
+  </div>
+</div>
 
 <%- include("partials/footer") -%>

@@ -4,31 +4,26 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
+const {
+  check,
+  validationResult
+} = require('express-validator');
+
 const lodash = require('lodash');
-
-
-const homeStartingContent = "This is the Home page, which contains all of my posts. Please click on the title or select 'read more' if you want to read each post in full.";
-const aboutContent = "This is the Home page, which contains all of my posts. Please click on the title or select 'read more' if you want to read each post in full.";
-const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+const urlencodedParser = bodyParser.urlencoded({
+  extended: false
+});
 
 app.use(express.static("public")); //We're telling express that our static files are held inside the "public" folder.
 
 mongoose.connect("mongodb://localhost:27017/BlogDB", {
   useNewUrlParser: true
 });
-
-/*const BlogPostSchema = {
-  title: String,
-  content: String
-};*/
 
 const BlogPostSchema = mongoose.Schema({
   title: String,
@@ -39,30 +34,34 @@ const BlogPostSchema = mongoose.Schema({
 
 const BlogPost = mongoose.model("BlogPost", BlogPostSchema);
 
-let posts = [];
-let randomPostId = "";
+const UserFeedbackSchema = mongoose.Schema({
+  userFullName: String,
+  email: String,
+  title: String,
+  content: String,
+}, {
+  timestamps: true
+});
 
+const UserMessage = mongoose.model("UserMessage", UserFeedbackSchema);
+
+let randomPostId = "";
 
 app.get("/", function(req, res) { //app.get is used to create routes in our server. We're telling the server to redirect to "home" if the user goes to the root route
 
   BlogPost.find({}, function(err, posts) {
     res.render("home", {
-      startingContent: homeStartingContent,
       posts: posts
     });
   });
 });
 
 app.get("/about", function(req, res) { //app.get is used to create routes in our server
-  res.render(__dirname + "/views/about.ejs", {
-    aboutContent: aboutContent
-  });
+  res.render(__dirname + "/views/about.ejs", {});
 });
 
 app.get("/contact", function(req, res) { //app.get is used to create routes in our server
-  res.render(__dirname + "/views/contact.ejs", {
-    contactContent: contactContent
-  });
+  res.render(__dirname + "/views/contact.ejs", {});
 });
 
 app.get("/compose", function(req, res) { //app.get is used to create routes in our server
@@ -71,20 +70,19 @@ app.get("/compose", function(req, res) { //app.get is used to create routes in o
 
 app.get("/post/:postName", function(req, res) { //app.get is used to create routes in our server
 
-  console.log("post/start");
   const requestedPostID = req.params.postName;
   randomPostGenerator();
-  if (randomPostId === "") {
+  /* if (randomPostId === "") {
     randomPostGenerator();
-  }
+  }*/
 
   BlogPost.findById(requestedPostID, function(err, requestedPost) {
 
     if (err) {
-      console.log("error: 404"); //write code later to redirect to an error page
+      res.render("errorPage");
     } else {
-      let fixedMinutes;
-      let dateAdded = requestedPost.createdAt;
+
+      let fixedMinutes, dateAdded = requestedPost.createdAt;
 
       if (dateAdded.getMinutes() < 10) {
         fixedMinutes = "" + "0" + dateAdded.getMinutes();
@@ -117,7 +115,7 @@ app.get("/edit/:editID", function(req, res) {
     _id: requestedPostID
   }, function(err, postData) {
     if (err) {
-      console.log("error: 404"); //write code later to redirect to an error page
+      res.render("errorPage");
     } else {
       res.render(__dirname + "/views/edit.ejs", {
         postId: requestedPostID,
@@ -135,48 +133,91 @@ app.get("/delete/:deleteID", function(req, res) {
 
   BlogPost.findByIdAndDelete(requestedPostID, function(err, docs) {
     if (err) {
-      console.log(err); //404
+      res.render("errorPage");
     } else {
       console.log("Deleted : ", docs);
     }
   });
-
   res.redirect("/");
 
 });
 
-app.post("/compose", function(req, res) {
-  const newPost = new BlogPost({
-    title: req.body.postTitle,
-    content: req.body.postBody
-  });
+app.post("/compose", urlencodedParser, [
+  check('postTitle', 'The post title is empty or less than 3 chars long. Please try again.')
+  .exists()
+  .isLength({
+    min: 5
+  }),
+  check('postBody', 'The post body is empty or less than 10 chars long. Please try again.')
+  .exists()
+  .isLength({
+    min: 10
+  }),
+], function(req, res) {
 
-  newPost.save(function(err) {
-    if (!err) {
-      res.redirect("/");
-    }
-  });
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const alert = errors.array();
+    console.log(alert);
+    res.render("compose", {
+      alert: alert
+    });
+
+  } else {
+
+    const newPost = new BlogPost({
+      title: req.body.postTitle,
+      content: req.body.postBody
+    });
+
+    newPost.save(function(err) {
+      if (!err) {
+        res.redirect("/");
+      }
+    });
+  }
 });
 
-app.post("/edit/:editID", function(req, res) {
+app.post("/edit/:editID", urlencodedParser, [
+  check('newTitle', 'Title is empty or less than 5 chars long. Please try again.')
+  .exists()
+  .isLength({
+    min: 5
+  }),
+  check('newBody', 'Body is empty or less than 10 chars long. Please try again.')
+  .exists()
+  .isLength({
+    min: 10
+  }),
+], function(req, res) {
 
-  console.log("we have this id" + req.params.editID + " and with the help of the server we have the following:" + req.body.newTitle + req.body.newBody);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const alert = errors.array();
+    //console.log(alert); req.params.editID
+    res.render("edit", {
+      alert: alert,
+      postId: req.params.editID,
+      postTitle: req.body.newTitle,
+      postContent: req.body.newBody
+    });
+  } else {
 
-  BlogPost.updateOne({
-    _id: {
-      $eq: req.params.editID
-    }
-  }, {
-    title: req.body.newTitle,
-    content: req.body.newBody
-  }, function(err, docs) {
-    if (err) {
-      console.log(err); //404
-    }
-  });
-
-  res.redirect("/");
-
+    BlogPost.updateOne({
+      _id: {
+        $eq: req.params.editID
+      }
+    }, {
+      title: req.body.newTitle,
+      content: req.body.newBody
+    }, function(err, docs) {
+      if (err) {
+        res.render("errorPage");
+      } else {
+        res.redirect("/");
+      }
+    });
+  }
 });
 
 function randomPostGenerator() {
@@ -202,6 +243,55 @@ function randomPostGenerator() {
   });
 
 }
+
+app.post("/contact", urlencodedParser, [
+  check('name', 'Name is empty or less than 3 chars long. Please try again.')
+  .exists()
+  .isLength({
+    min: 3
+  }),
+  check('email', 'Email is invalid. Please try again')
+  .isEmail()
+  .normalizeEmail(),
+  check('subject', 'Subject is empty or less than 3 chars long. Please try again.')
+  .exists()
+  .isLength({
+    min: 2
+  }),
+  check('message', 'The message body is empty or less than 10 chars long. Please try again.')
+  .exists()
+  .isLength({
+    min: 10
+  }),
+], function(req, res) {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const alert = errors.array();
+    console.log(alert);
+    res.render("contact", {
+      alert: alert
+    });
+  } else {
+    const newMessage = new UserMessage({
+      userFullName: req.body.name,
+      email: req.body.email,
+      title: req.body.subject,
+      content: req.body.message
+    });
+
+    newMessage.save(function(err) {
+      if (!err) {
+        res.redirect("/");
+      }
+    });
+  }
+});
+
+
+app.get("/errorPage", function(req, res) {
+  res.render("errorPage");
+});
 
 app.listen("3000", function() {
   console.log("Server started on port 3000");
