@@ -4,6 +4,13 @@
   <a href="/compose" class="btn btn-primary btn-md" role="button" aria-pressed="true"><i class="fa-solid fa-plus fa-sm"></i> New Post</a>
 </div>
 
+<% if(typeof alert != 'undefined') { %>
+<div class="alert alert-warning alert-dismissible fade show input-err-alert" role="alert">
+  <%= alert %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+  <% } %>
+
 <% posts.slice().reverse().forEach(function(post) { %>
 <h2><a class = "postTitles" href="post/<%=post._id%>"><%=post.title%></a></h2>
 <p><%=post.content.substring(0, 400)%>... <a href="post/<%=post._id%>">See post</a></p>

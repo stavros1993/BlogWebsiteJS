@@ -281,8 +281,11 @@ app.post("/contact", urlencodedParser, [
     });
 
     newMessage.save(function(err) {
+      let successMsg = "Your message has been sent. I'll reply soon.";
       if (!err) {
-        res.redirect("/");
+        res.render("contact", {
+          successMsg: successMsg
+        });
       }
     });
   }
