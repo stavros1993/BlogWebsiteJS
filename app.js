@@ -9,8 +9,6 @@ const {
   validationResult
 } = require('express-validator');
 
-const lodash = require('lodash');
-
 const app = express();
 
 app.set('view engine', 'ejs');
