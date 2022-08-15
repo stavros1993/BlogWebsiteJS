@@ -4,7 +4,7 @@ A site that resembles a blog. Implemented with Nodejs/Expressjs, EJS and MongoDB
 The "blog posts", which are dynamically retrieved from the database, are displayed
 shortened in the Homepage. To read the full posts, you have to click on the title,
 or the "read more" button, both of which take you to the post page. The blog posts
-are saved as strings in the database, but with the help of JS, the text is normally
+are saved as strings in the database, but with the help of JS string functions, the text is normally
 displayed with paragraphs.
 
 The site far includes the following features: 
